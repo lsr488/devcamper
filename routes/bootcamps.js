@@ -7,7 +7,7 @@ const router = express.Router();
 
 // get all bootcamps from database
 router.get('/', (req, res) => {
-	res.status(200).json({ success: true, msg: 'Show all bootcamps.' });
+
 });
 
 // get one bootcamp by id
