@@ -34,7 +34,7 @@ const BootcampSchema = new mongoose.Schema({
   },
   address: {
   	type: String,
-  	required: [true, 'Please add an addres.']
+  	required: [true, 'Please add an address.']
   },
   location: {
   	// GeoJSON Point
