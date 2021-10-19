@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require ('dotenv');
 const morgan = require('morgan');
+const errorHandler = require ('./middleware/error');
 const connectDB = require('./config/db');
 
 // Load ENV vars
@@ -25,10 +26,7 @@ if(process.env.NODE_ENV === 'development') {
 // mount routers
 app.use('/api/v1/bootcamps', bootcamps); // this pre-pends the URL for bootcamps, so in the bootcamps routes, you don't need to include that in the URL
 
-// /api/v1/courses
-// /api/v1/reviews
-// /api/v1/auth
-// /api/v1/users
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
