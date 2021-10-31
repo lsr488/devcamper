@@ -10,7 +10,6 @@ const Bootcamp = require('../models/Bootcamp');
 // @route 		GET /api/v1/bootcamps
 // @access 		Public
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-	console.log(req.query);
 
 	// pull keywords from query to use as mongoose methods
 	let query;
@@ -20,7 +19,9 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 	queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 	console.log(queryString);
 
-	const bootcamps = await Bootcamp.find();
+	query = Bootcamp.find(JSON.parse(queryString));
+
+	const bootcamps = await query;
 	
 	res.status(200).json({ 
 		success: true,
