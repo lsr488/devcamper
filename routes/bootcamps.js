@@ -6,13 +6,17 @@ const {
 	getBootcamp,
 	createBootcamp,
 	updateBootcamp,
-	deleteBootcamp
+	deleteBootcamp,
+	getBootcampsInRadius
 } = require('../controllers/bootcamps')
 
 // /api/v1/bootcamps
 // the full URL is pre-pended in the server
 
 const router = express.Router();
+
+// route for within radius
+router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
 
 // much more concisely creates the routes, with the logic all in the controller file
 router
