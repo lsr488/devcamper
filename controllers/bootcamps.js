@@ -10,17 +10,30 @@ const Bootcamp = require('../models/Bootcamp');
 // @route 		GET /api/v1/bootcamps
 // @access 		Public
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-
 	// pull keywords from query to use as mongoose methods
 	let query;
+
+	// copy req.query
+	const reqQuery = { ...req.query };
+
+	// fields to exclude
+	const removeFields = ['select'];
+
+	// loop over removeFields and deletethem from reqQuery
+	removeFields.forEach(param => delete reqQuery[param]);
+
+	console.log(reqQuery);
+
+	// create query string
 	let queryString = JSON.stringify(req.query);
 
-	// replace takes a regex and an optiona functional
+	// replace takes a regex and an optional functional to create operators ($gt, $gte, etc)
 	queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-	console.log(queryString);
 
+	// finding resource
 	query = Bootcamp.find(JSON.parse(queryString));
 
+	// executing query
 	const bootcamps = await query;
 	
 	res.status(200).json({ 
