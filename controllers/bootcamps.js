@@ -22,8 +22,6 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 	// loop over removeFields and deletethem from reqQuery
 	removeFields.forEach(param => delete reqQuery[param]);
 
-	console.log(reqQuery);
-
 	// create query string
 	let queryString = JSON.stringify(req.query);
 
@@ -32,6 +30,14 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 
 	// finding resource
 	query = Bootcamp.find(JSON.parse(queryString));
+
+	// Select fields
+	if(req.query.select) {
+		// format URL to match mongoose formula
+		const fields = req.query.select.split(',').join(' ');
+		console.log(fields);
+		query = query.select(fields);
+	}
 
 	// executing query
 	const bootcamps = await query;
