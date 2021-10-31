@@ -17,7 +17,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 	const reqQuery = { ...req.query };
 
 	// fields to exclude
-	const removeFields = ['select'];
+	const removeFields = ['select', 'sort'];
 
 	// loop over removeFields and deletethem from reqQuery
 	removeFields.forEach(param => delete reqQuery[param]);
@@ -31,12 +31,20 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 	// finding resource
 	query = Bootcamp.find(JSON.parse(queryString));
 
-	// Select fields
+	// prep search query for "select" fields
 	if(req.query.select) {
 		// format URL to match mongoose formula
 		const fields = req.query.select.split(',').join(' ');
-		console.log(fields);
 		query = query.select(fields);
+	}
+
+	// sort
+	if(req.query.sort) {
+		const sortBy = req.query.sort.split(',').join(' ');
+		query = query.sort(sortBy);
+	} else {
+		// default sorting is descending based on createdAt field
+		query = query.sort('-createdAt')
 	}
 
 	// executing query
