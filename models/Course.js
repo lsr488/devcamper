@@ -33,7 +33,7 @@ const CourseSchema = new mongoose.Schema({
 	},
 	bootcamp: {
 		type: mongoose.Schema.ObjectId,
-		ref: 'Bootcamp' // knows which model to reference
+		ref: 'Bootcamp', // knows which model to reference
 		required: true
 	}
 });
