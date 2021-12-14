@@ -15,8 +15,9 @@ const app = express();
 // body parser
 app.use(express.json());
 
-// Bring in Routes
+// Bring in Route files
 const bootcamps = require('./routes/bootcamps');
+const courses = require('./routes/courses');
 
 // dev logging middleware
 if(process.env.NODE_ENV === 'development') {
@@ -25,6 +26,7 @@ if(process.env.NODE_ENV === 'development') {
 
 // mount routers
 app.use('/api/v1/bootcamps', bootcamps); // this pre-pends the URL for bootcamps, so in the bootcamps routes, you don't need to include that in the URL
+app.use('/api/v1/courses', courses);
 
 app.use(errorHandler);
 
