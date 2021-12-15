@@ -10,10 +10,15 @@ const {
 	getBootcampsInRadius
 } = require('../controllers/bootcamps')
 
+// include other resource routers (to access things related to bootcamps, like courses)
+const courseRouter = require('./courses');
+
 // /api/v1/bootcamps
 // the full URL is pre-pended in the server
-
 const router = express.Router();
+
+// Reroute into other resource routers (like courses)
+router.use('/:bootcampId/courses', courseRouter);
 
 // route for within radius
 router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);

@@ -3,9 +3,9 @@ const express = require('express');
 // bring in controller methods
 const { 
 	getCourses
-} = require('../controllers/courses')
+} = require('../controllers/courses');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.route('/').get(getCourses);
 
