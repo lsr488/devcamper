@@ -98,7 +98,12 @@ const BootcampSchema = new mongoose.Schema({
   	type: Date,
   	default: Date.now
   }
-});
+}, { 
+  // virtuals allow you add temporary properties without getting pushed to the database
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+  }
+);
 
 
 // Create bootcamp slug from the name
@@ -125,9 +130,15 @@ BootcampSchema.pre('save', async function(next) {
 
   // do not save address in DB (because it's formatted above)
   this.address = undefined;
-
   next();
 });
 
+// Reverse populate with virtuals
+BootcampSchema.virtual('courses', {
+  ref: 'Course',
+  localField: '_id',
+  foreignField: 'bootcamp',
+  justOne: false // return an array with all, not just one result
+});
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);
