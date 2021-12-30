@@ -7,7 +7,8 @@ const {
 	createBootcamp,
 	updateBootcamp,
 	deleteBootcamp,
-	getBootcampsInRadius
+	getBootcampsInRadius,
+	bootcampPhotoUpload
 } = require('../controllers/bootcamps')
 
 // include other resource routers (to access things related to bootcamps, like courses)
@@ -22,6 +23,8 @@ router.use('/:bootcampId/courses', courseRouter);
 
 // route for within radius
 router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
+
+router.route('/:id/photo').put(bootcampPhotoUpload);
 
 // much more concisely creates the routes, with the logic all in the controller file
 router

@@ -1,3 +1,4 @@
+const path = require('path');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const geocoder = require('../utils/geocoder');
@@ -172,4 +173,49 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
 		data: bootcamps
 	});
 
+});
+
+// @desc 			Upload photo for bootcamp
+// @route 		PUT /api/v1/bootcamps/:id/photo
+// @access 		Private
+exports.bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
+	const bootcamp = await Bootcamp.findById(req.params.id);
+
+	if(!bootcamp) {
+		return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
+	}
+
+	if(!req.files) {
+		return next(new ErrorResponse('Please upload file', 400));
+	}
+
+	const file = req.files.file;
+
+	// make sure file is image
+	if(!file.mimetype.startsWith('image')) {
+		return next(new ErrorResponse('File is not an image', 400));		
+	}
+
+	// check file size
+	if(file.size > process.env.FILE_UPLOAD_MAX) {
+		return next(new ErrorResponse(`Upload file less than ${FILE_UPLOAD_MAX}`, 400));				
+	}
+
+	// rename file to unique filename
+	file.name = `photo_${bootcamp._id}${path.parse(file.name).ext}`;
+
+	// actually move/upload file
+	file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
+		if(err) {
+			console.error(err);
+			return next(new ErrorResponse('Problem with file upload', 500));
+		}
+
+		await Bootcamp.findByIdAndUpdate(req.params.id, { photo: file.name });
+
+		res.status(200).json({
+			success: true,
+			data: file.name
+		});
+	});
 });
