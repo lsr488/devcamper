@@ -1,6 +1,8 @@
+const path = require('path');
 const express = require('express');
 const dotenv = require ('dotenv');
 const morgan = require('morgan');
+const fileupload = require('express-fileupload');
 const errorHandler = require ('./middleware/error');
 const connectDB = require('./config/db');
 
@@ -23,6 +25,12 @@ const courses = require('./routes/courses');
 if(process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'))
 }
+
+// file uploading
+app.use(fileupload());
+
+// set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // mount routers
 app.use('/api/v1/bootcamps', bootcamps); // this pre-pends the URL for bootcamps, so in the bootcamps routes, you don't need to include that in the URL
