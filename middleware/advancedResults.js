@@ -19,8 +19,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 	queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
 	// finding resource
-	// .populate adds the virtual property "courses" so each bootcamp displays its associated courses
-	query = model.find(JSON.parse(queryString)).populate('courses'); 
+	query = model.find(JSON.parse(queryString)); 
 
 	// prep search query for "select" fields
 	if(req.query.select) {
@@ -47,6 +46,11 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 
 	query = query.skip(startIndex).limit(limit);
 
+	// .populate adds the virtual property (eg "courses") so each bootcamp displays its associated courses
+	if(populate) {
+		query = query.populate(populate);
+	}
+
 	// executing query
 	const results = await query;
 	
@@ -66,6 +70,15 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 			limit: limit
 		}
 	}
+
+	res.advancedResults = {
+		success: true,
+		count: results.length,
+		pagination,
+		data: results
+	}
+
+	next();
 }
 
  module.exports = advancedResults
