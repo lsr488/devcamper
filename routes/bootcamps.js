@@ -34,7 +34,7 @@ router.route('/:id/photo').put(bootcampPhotoUpload);
 // much more concisely creates the routes, with the logic all in the controller file
 router
 	.route('/')
-	.get(advancedResults(getBootcamps, 'courses'), getBootcamps)
+	.get(advancedResults(Bootcamp, 'courses'), getBootcamps)
 	.post(createBootcamp);
 
 router.route('/:id')
