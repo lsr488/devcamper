@@ -19,7 +19,7 @@ const app = express();
 app.use(express.json());
 
 // Cookie parser
-app.use(cookieParse())
+app.use(cookieParser())
 
 // Route files
 const bootcamps = require('./routes/bootcamps');
