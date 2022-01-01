@@ -17,10 +17,8 @@ exports.register = asyncHandler(async (req, res, next) => {
 		role
 	});
 
-	// Create password token
-	const token = user.getSignedJwtToken();
-
-	res.status(200).json({ success: true, token });
+	// Create and send cookie with password token
+	sendTokenResponse(user, 200, res);
 });
 
 // @desc 			Login user
@@ -49,10 +47,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 		return next(new ErrorResponse('Invalid credentials', 401));	
 	}
 
-	// Create password token
-	const token = user.getSignedJwtToken();
-
-	res.status(200).json({ success: true, token });
+	sendTokenResponse(user, 200, res);
 });
 
 
