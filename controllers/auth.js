@@ -54,3 +54,26 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 	res.status(200).json({ success: true, token });
 });
+
+
+// Get token from model, create cookie and send response
+const sendTokenResponse = (user, statusCode, res) => {
+	// Create password token
+	const token = user.getSignedJwtToken();
+
+	// create cookie
+	const options = {
+		// math logic converts cookie-parser's default time to days, eg 30 day expiration
+		expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
+		// access cookie via
+		httpOnly: true
+	};
+
+	res
+		.status(statusCode)
+		.cookie('token', token, options)
+		.json({
+			success: true,
+			token
+		});
+}
