@@ -97,6 +97,11 @@ const BootcampSchema = new mongoose.Schema({
   createdAt: {
   	type: Date,
   	default: Date.now
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User', // knows which model to reference
+    required: true
   }
 }, { 
   // virtuals allow you add temporary properties without getting pushed to the database
