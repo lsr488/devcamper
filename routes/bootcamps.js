@@ -15,6 +15,7 @@ const Bootcamp = require('../models/Bootcamp');
 
 // MIDDLEWARE
 const advancedResults = require('../middleware/advancedResults');
+const { protect } = require('../middleware/auth');
 
 // include other resource routers (to access things related to bootcamps, like courses)
 const courseRouter = require('./courses');
@@ -29,17 +30,17 @@ router.use('/:bootcampId/courses', courseRouter);
 // route for within radius
 router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
 
-router.route('/:id/photo').put(bootcampPhotoUpload);
+router.route('/:id/photo').put(protect, bootcampPhotoUpload);
 
 // much more concisely creates the routes, with the logic all in the controller file
 router
 	.route('/')
 	.get(advancedResults(Bootcamp, 'courses'), getBootcamps)
-	.post(createBootcamp);
+	.post(protect, createBootcamp);
 
 router.route('/:id')
 	.get(getBootcamp)
-	.put(updateBootcamp)
-	.delete(deleteBootcamp);
+	.put(protect, updateBootcamp)
+	.delete(protect, deleteBootcamp);
 
 module.exports = router;
