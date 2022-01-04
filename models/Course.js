@@ -35,7 +35,12 @@ const CourseSchema = new mongoose.Schema({
 		type: mongoose.Schema.ObjectId,
 		ref: 'Bootcamp', // knows which model to reference
 		required: true
-	}
+	},
+	user: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'User', // knows which model to reference
+		required: true
+	}	
 });
 
 // define a static method on the model to get avg course tuition
