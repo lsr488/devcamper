@@ -40,10 +40,10 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
 	// check for bootcamp created by user
 	const publishedBootcamp = await Bootcamp.findOne({ user: req.user.id });
 
-// if user is not admin, they can only create 1 bootcamp
-if(publishedBootcamp && req.user.role !== 'admin') {
-	return next(new ErrorResponse(`User with id ${req.user.id} has already published a bootcamp.`), 400);
-}
+	// if user is not admin, they can only create 1 bootcamp
+	if(publishedBootcamp && req.user.role !== 'admin') {
+		return next(new ErrorResponse(`User with id ${req.user.id} has already published a bootcamp.`), 400);
+	}
 
 	const bootcamp = await Bootcamp.create(req.body);
 
@@ -65,7 +65,6 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 
 	// check user is bootcamp owner
 	if(bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
-		return next();
 		return next(new ErrorResponse(`User ${req.user.id} isn't authorized to update this bootcamp`, 401));
 	}
 
@@ -89,7 +88,6 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 
 	// check user is bootcamp owner
 	if(bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
-		return next();
 		return next(new ErrorResponse(`User ${req.user.id} isn't authorized to delete this bootcamp`, 401));
 	}
 
