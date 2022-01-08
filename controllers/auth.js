@@ -82,9 +82,9 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 	await user.save({ validateBeforeSave: false });
 
 	// Create reset URL
-	const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/resetpassword/${resetToken}`;
+	const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/auth/resetpassword/${resetToken}`;
 
-	const message = `You're receiging this email because you or someone else has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`;
+	const message = `You're receiving this email because you or someone else has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`;
 
 	try{ 
 		await sendEmail({
@@ -103,38 +103,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
 		return next(new ErrorResponse('Email could not be sent', 500));
 	}
-
-	res.status(200).json({
-		success: true,
-		data: user
-	});
 });
-
-// Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
-	// Create password token
-	const token = user.getSignedJwtToken();
-
-	// create cookie
-	const options = {
-		// math logic converts cookie-parser's default time to days, eg 30 day expiration
-		expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
-		// access cookie via
-		httpOnly: true
-	};
-
-	if(process.env.NODE_ENV === 'production') {
-		options.secure = true;
-	}
-
-	res
-		.status(statusCode)
-		.cookie('token', token, options)
-		.json({
-			success: true,
-			token
-		});
-}
 
 // @desc     Reset password
 // @route    PUT /api/v1/auth/resetpassword/:resettoken
@@ -165,3 +134,29 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
 	sendTokenResponse(user, 200, res);
 });
+
+// Get token from model, create cookie and send response
+const sendTokenResponse = (user, statusCode, res) => {
+	// Create password token
+	const token = user.getSignedJwtToken();
+
+	// create cookie
+	const options = {
+		// math logic converts cookie-parser's default time to days, eg 30 day expiration
+		expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
+		// access cookie via
+		httpOnly: true
+	};
+
+	if(process.env.NODE_ENV === 'production') {
+		options.secure = true;
+	}
+
+	res
+		.status(statusCode)
+		.cookie('token', token, options)
+		.json({
+			success: true,
+			token
+		});
+}
