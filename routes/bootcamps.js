@@ -15,6 +15,7 @@ const Bootcamp = require('../models/Bootcamp');
 
 // include other resource routers (to access things related to bootcamps, like courses)
 const courseRouter = require('./courses');
+const reviewRouter = require('./reviews');
 
 // /api/v1/bootcamps
 // the full URL is pre-pended in the server
@@ -26,6 +27,7 @@ const { protect, authorize } = require('../middleware/auth');
 
 // Reroute into other resource routers (like courses)
 router.use('/:bootcampId/courses', courseRouter);
+router.use('/:bootcampId/reviews', reviewRouter);
 
 // route for within radius
 router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
