@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const xss = require('xss-clean');
 // const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
+const cors = require('cors');
 const errorHandler = require ('./middleware/error');
 const connectDB = require('./config/db');
 
@@ -59,6 +60,9 @@ app.use(xss());
 
 // Prevent http parameter pollution
 app.use(hpp());
+
+// Enable cross site origin
+app.use(cors());
 
 // set static folder
 app.use(express.static(path.join(__dirname, 'public')));
