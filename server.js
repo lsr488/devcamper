@@ -42,7 +42,7 @@ app.use(fileupload());
 app.use(mongoSantize());
 
 // Set security headers
-app.use(hemlet());
+app.use(helmet());
 
 // set static folder
 app.use(express.static(path.join(__dirname, 'public')));
