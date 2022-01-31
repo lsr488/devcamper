@@ -5,3 +5,5 @@ node_modules/
 config/config.env
 help/
 scratch.txt
+docgen.exe
+DevCamper.postman_collection.json
